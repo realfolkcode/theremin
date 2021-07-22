@@ -1,15 +1,16 @@
 import numpy as np
 
 class Theremin():
-    def __init__(self, detector):
+    def __init__(self, detector, model=None):
         self.samplerate = 44100
         self.blocksize = 0
         self.freq = 440.0
         self.prev_freq = self.freq
         self.amplitude = 1
-        self.channels = 2
+        self.channels = 1
         self.start_idx = 0
         self.detector = detector
+        self.model = model
 
     def sine(self, freq, x):
         return self.amplitude * np.sin(2 * np.pi * freq * x)
