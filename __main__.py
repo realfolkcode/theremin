@@ -3,18 +3,11 @@ import theremin
 import cv2
 import time
 import sounddevice as sd
-import tensorflow as tf
-import ddsp
-import ddsp.training
-import os
+import torch
 
 # Load DDSP model
-model_dir = 'model'
-ckpt_files = [f for f in tf.io.gfile.listdir(model_dir) if 'ckpt' in f]
-ckpt_name = ckpt_files[0].split('.')[0]
-ckpt = os.path.join(model_dir, ckpt_name)
-model = ddsp.training.models.Autoencoder()
-model.restore(ckpt)
+model_path = 'model/ddsp_pretrained_violin/ddsp_debug_pretrained.ts'
+model = torch.jit.load(model_path)
 
 pTime = 0
 cTime = 0
@@ -22,7 +15,7 @@ cap = cv2.VideoCapture(0)
 success, img = cap.read()
 h, w, c = img.shape
 detector = hd.HandDetector(window_shape=(h, w))
-tm = theremin.Theremin(detector=detector, model=model)
+tm = theremin.Theremin(detector=detector)
 
 with sd.OutputStream(blocksize=tm.blocksize,
                      channels=tm.channels,
