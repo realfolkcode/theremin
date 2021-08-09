@@ -3,6 +3,11 @@ import theremin
 import cv2
 import time
 import sounddevice as sd
+import torch
+
+# Load DDSP model
+model_path = 'model/ddsp_pretrained_violin/ddsp_debug_pretrained.ts'
+model = torch.jit.load(model_path)
 
 pTime = 0
 cTime = 0
@@ -22,8 +27,6 @@ with sd.OutputStream(blocksize=tm.blocksize,
         h, w, c = img.shape
 
         detector.find_hands(img, draw=True)
-        #detector.update_center(img, 0)
-        #detector.update_center(img, 1)
 
         cTime = time.time()
         fps = 1 / (cTime - pTime)
